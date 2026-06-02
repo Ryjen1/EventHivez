@@ -1,0 +1,441 @@
+"use client";
+
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+
+// ─── Category options ────────────────────────────────────────────────────────
+const CATEGORIES = [
+  { label: "Tech", icon: "/icons/Tech.svg" },
+  { label: "Party", icon: "/icons/party.svg" },
+  { label: "Crypto", icon: "/icons/crypto.svg" },
+  { label: "Food", icon: "/icons/foods.svg" },
+  { label: "Wellness", icon: "/icons/wellness.svg" },
+  { label: "Gym", icon: "/icons/gym.svg" },
+  { label: "Religion", icon: "/icons/religion.svg" },
+];
+
+// ─── Location options ─────────────────────────────────────────────────────────
+const LOCATIONS = [
+  { label: "Online", icon: "/icons/global.svg" },
+  { label: "Lagos", icon: "/icons/location.svg" },
+  { label: "New York", icon: "/icons/location.svg" },
+  { label: "London", icon: "/icons/location.svg" },
+  { label: "Singapore", icon: "/icons/location.svg" },
+];
+
+// ─── Date options ─────────────────────────────────────────────────────────────
+const DATES = ["Today", "Tomorrow", "This Week", "This Month", "Any time"];
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+/**
+ * Filter state interface for event filtering
+ * @interface FilterState
+ */
+export type FilterState = {
+  /** Selected date filter option */
+  date: string;
+  /** Array of selected category names */
+  categories: string[];
+  /** Array of selected location names */
+  locations: string[];
+  /** Minimum price filter value */
+  minPrice: string;
+  /** Maximum price filter value */
+  maxPrice: string;
+};
+
+/**
+ * Props for FilterSidebar component
+ * @interface FilterSidebarProps
+ */
+interface FilterSidebarProps {
+  /** Whether the sidebar is open or closed */
+  isOpen: boolean;
+  /** Callback function to close the sidebar */
+  onClose: () => void;
+  /** Current filter state */
+  filters: FilterState;
+  /** Callback function when filters change */
+  onFiltersChange: (filters: FilterState) => void;
+}
+
+// ─── Sidebar animations ───────────────────────────────────────────────────────
+const sidebarVariants = {
+  hidden: { x: "100%", opacity: 0 },
+  visible: {
+    x: 0,
+    opacity: 1,
+    transition: { type: "spring" as const, stiffness: 300, damping: 32 },
+  },
+  exit: {
+    x: "100%",
+    opacity: 0,
+    transition: { duration: 0.22, ease: "easeIn" as const },
+  },
+};
+
+const backdropVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.2 } },
+  exit: { opacity: 0, transition: { duration: 0.2 } },
+};
+
+// ─── Helper: toggle item in array ────────────────────────────────────────────
+/**
+ * Helper function to toggle an item in an array
+ *
+ * @param arr - Array of strings to modify
+ * @param item - Item to toggle (add if not present, remove if present)
+ * @returns New array with the item toggled
+ */
+function toggleItem(arr: string[], item: string): string[] {
+  return arr.includes(item) ? arr.filter((v) => v !== item) : [...arr, item];
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
+/**
+ * Filter sidebar component for event filtering
+ *
+ * Features:
+ * - Animated slide-in/out with Framer Motion
+ * - Multiple filter categories (date, category, location, price)
+ * - Backdrop overlay for mobile experience
+ * - Responsive design with touch support
+ *
+ * @param props - FilterSidebarProps containing component configuration
+ * @returns React component that renders the filter sidebar
+ */
+export function FilterSidebar({
+  isOpen,
+  onClose,
+  filters,
+  onFiltersChange,
+}: FilterSidebarProps) {
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
+  const [localFilters, setLocalFilters] = useState<FilterState>(filters);
+
+  // Sync local filters with parent filters when opened
+  useEffect(() => {
+    if (isOpen) {
+      setLocalFilters(filters);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
+  // Close on Escape key
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    if (isOpen) document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [isOpen, onClose]);
+
+  // Prevent body scroll when open
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  // ── helpers ──
+  const setDate = (date: string) => setLocalFilters({ ...localFilters, date });
+  const toggleCategory = (cat: string) =>
+    setLocalFilters({
+      ...localFilters,
+      categories: toggleItem(localFilters.categories, cat),
+    });
+  const toggleLocation = (loc: string) =>
+    setLocalFilters({
+      ...localFilters,
+      locations: toggleItem(localFilters.locations, loc),
+    });
+  const setMinPrice = (minPrice: string) =>
+    setLocalFilters({ ...localFilters, minPrice });
+  const setMaxPrice = (maxPrice: string) =>
+    setLocalFilters({ ...localFilters, maxPrice });
+
+  const handleReset = () => {
+    const defaultFilters = {
+      date: "",
+      categories: [],
+      locations: [],
+      minPrice: "",
+      maxPrice: "",
+    };
+    setLocalFilters(defaultFilters);
+    onFiltersChange(defaultFilters);
+    onClose();
+  };
+
+  const handleApply = () => {
+    onFiltersChange(localFilters);
+    onClose();
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* ── Backdrop ── */}
+          <motion.div
+            key="filter-backdrop"
+            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px]"
+            variants={backdropVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            onClick={onClose}
+            aria-hidden="true"
+          />
+
+          {/* ── Sidebar panel ── */}
+          <motion.aside
+            key="filter-sidebar"
+            ref={sidebarRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Filter events"
+            className="
+              fixed top-0 right-0 z-50 h-full
+              w-full max-w-[360px] sm:max-w-[420px]
+              bg-base shadow-[-8px_0_32px_rgba(0,0,0,0.12)]
+              flex flex-col overflow-y-auto
+            "
+            variants={sidebarVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
+            {/* ── Header ── */}
+            <div className="flex items-center justify-between px-6 pt-7 pb-5 border-b border-black/10 shrink-0">
+              <div className="flex items-center gap-2.5">
+                <Image
+                  src="/icons/filter.svg"
+                  width={20}
+                  height={20}
+                  alt=""
+                  aria-hidden="true"
+                />
+                <h2 className="font-bold text-[20px]/6 text-black">Filters</h2>
+              </div>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleReset}
+                  className="text-[13px] font-medium text-black/50 hover:text-black transition-colors underline underline-offset-2"
+                >
+                  Clear Filter
+                </button>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  aria-label="Close filters"
+                  className="
+                    flex items-center justify-center w-8 h-8 rounded-full
+                    bg-black text-white
+                    hover:bg-black/80 active:scale-95 transition-all
+                  "
+                >
+                  <Image src="/icons/x.svg" width={14} height={14} alt="Close" className="text-white" />
+                </button>
+              </div>
+            </div>
+
+            {/* ── Scrollable body ── */}
+            <div className="flex flex-col gap-7 px-6 py-6 flex-1">
+              {/* ─ Date section ─ */}
+              <section>
+                <h3 className="font-semibold text-[15px] text-black mb-3">
+                  Date
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {DATES.map((d) => (
+                    <Pill
+                      key={d}
+                      label={d}
+                      active={localFilters.date === d}
+                      onClick={() => setDate(localFilters.date === d ? "" : d)}
+                    />
+                  ))}
+                </div>
+              </section>
+
+              <Divider />
+
+              {/* ─ Category section ─ */}
+              <section>
+                <h3 className="font-semibold text-[15px] text-black mb-3">
+                  Category
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {CATEGORIES.map((cat) => (
+                    <IconPill
+                      key={cat.label}
+                      label={cat.label}
+                      icon={cat.icon}
+                      active={localFilters.categories.includes(cat.label)}
+                      onClick={() => toggleCategory(cat.label)}
+                    />
+                  ))}
+                </div>
+              </section>
+
+              <Divider />
+
+              {/* ─ Location section ─ */}
+              <section>
+                <h3 className="font-semibold text-[15px] text-black mb-3">
+                  Location
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {LOCATIONS.map((loc) => (
+                    <IconPill
+                      key={loc.label}
+                      label={loc.label}
+                      icon={loc.icon}
+                      active={localFilters.locations.includes(loc.label)}
+                      onClick={() => toggleLocation(loc.label)}
+                    />
+                  ))}
+                </div>
+              </section>
+
+              <Divider />
+
+              {/* ─ Price section ─ */}
+              <section>
+                <h3 className="font-semibold text-[15px] text-black mb-3">
+                  Price Range
+                </h3>
+                <div className="flex items-center gap-3">
+                  <div className="flex-1 flex flex-col gap-1">
+                    <label
+                      htmlFor="filter-min-price"
+                      className="text-[12px] font-medium text-black/50"
+                    >
+                      Min ($)
+                    </label>
+                    <input
+                      id="filter-min-price"
+                      type="number"
+                      min={0}
+                      placeholder="0"
+                      value={localFilters.minPrice}
+                      onChange={(e) => setMinPrice(e.target.value)}
+                      className="
+                        h-10 px-3 rounded-xl bg-white border border-black/15
+                        text-[14px] font-medium text-black
+                        outline-none focus:border-black/50
+                        transition-colors
+                        [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+                      "
+                    />
+                  </div>
+
+                  <span className="text-black/30 mt-5 font-light text-lg">
+                    —
+                  </span>
+
+                  <div className="flex-1 flex flex-col gap-1">
+                    <label
+                      htmlFor="filter-max-price"
+                      className="text-[12px] font-medium text-black/50"
+                    >
+                      Max ($)
+                    </label>
+                    <input
+                      id="filter-max-price"
+                      type="number"
+                      min={0}
+                      placeholder="Any"
+                      value={localFilters.maxPrice}
+                      onChange={(e) => setMaxPrice(e.target.value)}
+                      className="
+                        h-10 px-3 rounded-xl bg-white border border-black/15
+                        text-[14px] font-medium text-black
+                        outline-none focus:border-black/50
+                        transition-colors
+                        [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+                      "
+                    />
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            {/* ── Footer CTA ── */}
+            <div className="px-6 py-5 border-t border-black/10 shrink-0">
+            <Button
+              variant="dark"
+              onClick={handleApply}
+              className="w-full h-12 rounded-[13px] text-[15px]"
+            >
+              Apply Filters
+            </Button>
+            </div>
+          </motion.aside>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+function Divider() {
+  return <div className="h-px bg-black/10 -mx-6" />;
+}
+
+interface PillProps {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}
+
+function Pill({ label, active, onClick }: PillProps) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`
+        px-4 py-2 rounded-full text-[13px] font-medium border transition-all
+        ${
+          active
+            ? "bg-black text-white border-black shadow-[-3px_3px_0_rgba(0,0,0,0.2)]"
+            : "bg-white text-black border-black/20 hover:border-black/50"
+        }
+      `}
+    >
+      {label}
+    </button>
+  );
+}
+
+interface IconPillProps extends PillProps {
+  icon: string;
+}
+
+function IconPill({ label, icon, active, onClick }: IconPillProps) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`
+        flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[13px] font-medium border transition-all
+        ${
+          active
+            ? "bg-accent text-black border-black shadow-[-3px_3px_0_rgba(0,0,0,1)]"
+            : "bg-white text-black border-black/20 hover:border-black/50"
+        }
+      `}
+    >
+      <Image src={icon} width={16} height={16} alt="" aria-hidden="true" />
+      {label}
+    </button>
+  );
+}

@@ -1,0 +1,72 @@
+[package]
+name = "eventhivez-server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Web framework
+axum = { version = "0.7", features = ["ws", "multipart"] }
+
+# Async runtime
+tokio = { version = "1.37", features = ["full"] }
+
+# Middleware
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors", "trace", "set-header", "request-id"] }
+pin-project = "1.1"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+
+# Env handling (recommended)
+dotenvy = "0.15"
+
+# Database
+sqlx = { version = "0.7", features = ["postgres", "runtime-tokio", "macros", "uuid", "chrono", "rust_decimal"] }
+uuid = { version = "1.0", features = ["serde", "v4"] }
+chrono = { version = "0.4", features = ["serde"] }
+rust_decimal = { version = "1.33", features = ["db-postgres"] }
+
+# Logging
+thiserror = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Async trait support for notification providers
+async-trait = "0.1"
+
+# HTTP body buffering for audit middleware
+bytes = "1.0"
+http-body-util = "0.1"
+
+# Cryptography for QR payload signing
+ed25519-dalek = { version = "2.1", features = ["rand_core"] }
+rand = "0.8"
+base64 = "0.21"
+hex = "0.4"
+
+# Redis for caching
+redis = { version = "0.24", features = ["tokio-comp", "connection-manager"] }
+
+# Rate limiting (using built-in RateLimitLayer only; tower_governor requires axum 0.8)
+
+# System monitoring
+sysinfo = "0.30"
+
+# JWT authentication (Issue #484)
+jsonwebtoken = "9.3"
+
+# AWS S3 for image uploads
+aws-sdk-s3 = "1.82"
+aws-credential-types = "1.2"
+aws-config = "1.5"
+
+# Currency conversion HTTP client already covered by reqwest above
+
+# Testing
+[dev-dependencies]
+temp-env = { version = "0.3", features = ["async_closure"] }
+tower = { version = "0.4", features = ["full"] }
+serde_yaml = "0.9"

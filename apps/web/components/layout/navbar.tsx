@@ -1,0 +1,299 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+
+// Sub-components
+import { GuestNav } from "./navbar/guest-nav";
+import { MobileNavLink } from "./navbar/mobile-nav-link";
+import { UserNav } from "./navbar/user-nav";
+
+/**
+ * Main navigation bar component for the application
+ *
+ * Features:
+ * - Responsive design with mobile menu toggle
+ * - Different navigation states for logged-in vs guest users
+ * - Body scroll lock when mobile menu is open
+ * - Animated mobile menu using Framer Motion
+ *
+ * @returns React component that renders the main navigation bar
+ */
+export function Navbar() {
+  const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoggedIn] = useState(true);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  // Lock body scroll when menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
+  // Escape key closes menu; focus trap inside panel
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsOpen(false);
+        triggerRef.current?.focus();
+        return;
+      }
+      if (e.key === "Tab" && menuRef.current) {
+        const focusable = Array.from(
+          menuRef.current.querySelectorAll<HTMLElement>(
+            'a, button, [tabindex]:not([tabindex="-1"])'
+          )
+        ).filter((el) => !el.hasAttribute("disabled"));
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    // Auto-focus first focusable element
+    const firstFocusable = menuRef.current?.querySelector<HTMLElement>(
+      'a, button, [tabindex]:not([tabindex="-1"])'
+    );
+    firstFocusable?.focus();
+
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen]);
+
+  const toggleMenu = () => setIsOpen(!isOpen);
+
+  const menuVariants = {
+    closed: {
+      x: "100%",
+      transition: {
+        type: "spring" as const,
+        stiffness: 400,
+        damping: 40,
+      },
+    },
+    open: {
+      x: "0%",
+      transition: {
+        type: "spring" as const,
+        stiffness: 400,
+        damping: 40,
+      },
+    },
+  };
+
+  const linkVariants = {
+    closed: { opacity: 0, y: 20 },
+    open: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.1 + 0.2,
+        duration: 0.4,
+        ease: "easeOut" as const,
+      },
+    }),
+  };
+
+  return (
+    <>
+      <nav className="w-full max-w-[1221px] h-[56px] mt-[35px] mx-auto flex px-4 lg:px-0 items-center justify-between relative z-50">
+        {isLoggedIn ? (
+          <UserNav pathname={pathname} />
+        ) : (
+          <GuestNav pathname={pathname} />
+        )}
+
+        <div className="flex items-center lg:hidden">
+          <button
+            ref={triggerRef}
+            type="button"
+            onClick={toggleMenu}
+            className="z-50 flex flex-col justify-center items-center w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-black/10 hover:bg-white/20 transition-colors"
+            aria-label="Toggle Menu"
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
+          >
+            <div className="w-6 h-6 flex flex-col justify-center gap-[5px]">
+              <motion.span
+                animate={isOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
+                className="w-full h-[2px] bg-black rounded-full origin-center"
+              />
+              <motion.span
+                animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
+                className="w-full h-[2px] bg-black rounded-full"
+              />
+              <motion.span
+                animate={isOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
+                className="w-full h-[2px] bg-black rounded-full origin-center"
+              />
+            </div>
+          </button>
+        </div>
+      </nav>
+
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={toggleMenu}
+              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
+            />
+
+            <motion.div
+              ref={menuRef}
+              id="mobile-menu"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Mobile navigation"
+              variants={menuVariants}
+              initial="closed"
+              animate="open"
+              exit="closed"
+              className="fixed top-0 right-0 h-full w-[300px] bg-white z-50 shadow-2xl flex flex-col p-8 pt-24 lg:hidden"
+            >
+              <button
+                type="button"
+                onClick={toggleMenu}
+                className="absolute top-6 right-6 p-2 rounded-full hover:bg-gray-100 transition-colors"
+                aria-label="Close Menu"
+              >
+                <Image src="/icons/x.svg" width={24} height={24} alt="Close menu" className="object-contain" />
+              </button>
+
+              <div className="flex flex-col gap-6">
+                {isLoggedIn ? (
+                  <>
+                    <MobileNavLink
+                      i={0}
+                      href="/home"
+                      icon="/icons/home.svg"
+                      text="Home"
+                      isActive={pathname === "/home"}
+                      onClose={() => setIsOpen(false)}
+                      ariaLabel="Home"
+                    />
+                    <MobileNavLink
+                      i={1}
+                      href="/discover"
+                      icon="/icons/earth-yellow.svg"
+                      text="Discover Events"
+                      isActive={
+                        pathname === "/discover" ||
+                        pathname.startsWith("/events")
+                      }
+                      onClose={() => setIsOpen(false)}
+                      ariaLabel="Discover Events"
+                    />
+                    <MobileNavLink
+                      i={2}
+                      href="/organizers"
+                      icon="/icons/user-group.svg"
+                      text="Organizers"
+                      isActive={pathname === "/organizers"}
+                      onClose={() => setIsOpen(false)}
+                      ariaLabel="Organizers"
+                    />
+                    <MobileNavLink
+                      i={3}
+                      href="/stellar"
+                      icon="/icons/stellar-xlm-logo 1.svg"
+                      text="Stellar Ecosystem"
+                      isActive={pathname === "/stellar"}
+                      onClose={() => setIsOpen(false)}
+                      ariaLabel="Stellar Ecosystem"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <MobileNavLink
+                      i={0}
+                      href="/discover"
+                      icon="/icons/earth.svg"
+                      text="Discover Events"
+                      isActive={
+                        pathname === "/discover" ||
+                        pathname.startsWith("/events")
+                      }
+                      onClose={() => setIsOpen(false)}
+                      ariaLabel="Discover Events"
+                    />
+                    <MobileNavLink
+                      i={1}
+                      href="/pricing"
+                      icon="/icons/dollar-circle.svg"
+                      text="Pricing"
+                      isActive={pathname === "/pricing"}
+                      onClose={() => setIsOpen(false)}
+                      ariaLabel="Pricing"
+                    />
+                    <MobileNavLink
+                      i={2}
+                      href="/stellar"
+                      icon="/icons/stellar-xlm-logo 1.svg"
+                      text="Stellar Ecosystem"
+                      isActive={pathname === "/stellar"}
+                      onClose={() => setIsOpen(false)}
+                      ariaLabel="Stellar Ecosystem"
+                    />
+                    <MobileNavLink
+                      i={3}
+                      href="/faqs"
+                      icon="/icons/help-circle.svg"
+                      text="FAQs"
+                      isActive={pathname === "/faqs"}
+                      onClose={() => setIsOpen(false)}
+                      ariaLabel="Frequently Asked Questions"
+                    />
+                  </>
+                )}
+
+                <motion.div custom={4} variants={linkVariants} className="mt-4">
+                  <Link href={isLoggedIn ? "/create-event" : "/auth"} onClick={() => setIsOpen(false)}>
+                    <Button variant="dark" className="w-full justify-center">
+                      <span>Create Your Event</span>
+                      <Image
+                        src="/icons/arrow-up-right-01.svg"
+                        alt="Create event"
+                        width={24}
+                        height={24}
+                        className="invert group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                      />
+                    </Button>
+                  </Link>
+                </motion.div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}

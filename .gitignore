@@ -1,0 +1,24 @@
+node_modules
+.env
+.env.local
+.env.devnet
+.next
+dist
+*.log
+
+# Rust
+/target
+**/target
+server/target
+contract/target
+
+# Contract test snapshots
+**/test_snapshots/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
