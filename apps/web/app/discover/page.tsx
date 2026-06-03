@@ -19,7 +19,6 @@ export default function DiscoverPage() {
     window.setTimeout(() => setToastMessage(null), 3500);
   };
 
-  // Load all organizers for filtering
   useEffect(() => {
     const loadOrganizers = async () => {
       try {
@@ -29,42 +28,45 @@ export default function DiscoverPage() {
         setAllOrganizers([]);
       }
     };
-
     loadOrganizers();
   }, []);
 
   return (
-    <main className="flex flex-col min-h-screen bg-base">
+    <main className="flex flex-col min-h-screen bg-dark-deep">
       <Navbar />
       {toastMessage && (
-        <div className="fixed top-4 right-4 z-[60] rounded-lg bg-black px-4 py-3 text-sm text-white shadow-lg">
+        <div className="fixed top-4 right-4 z-[60] rounded-lg bg-accent px-4 py-3 text-sm text-white shadow-lg">
           {toastMessage}
         </div>
       )}
-      <div className="p-10 pl-45 hidden lg:block bg-base">
+      <div className="p-10 pl-45 hidden lg:block">
         <div className="flex justify-start items-center gap-4 p-5 pb-10">
-          <h1 className="font-semibold md:text-4xl pl-3">Explore events</h1>
+          <h1 className="font-semibold md:text-4xl pl-3 text-white">Explore Events</h1>
         </div>
       </div>
-      <CategorySection 
-        activeCategory={activeCategory} 
-        onCategoryChange={setActiveCategory} 
-        onError={showErrorToast} 
+      <CategorySection
+        activeCategory={activeCategory}
+        onCategoryChange={setActiveCategory}
+        onError={showErrorToast}
       />
-      <PopularEventsSection 
-        activeCategory={activeCategory} 
-        onError={showErrorToast} 
+      <PopularEventsSection
+        activeCategory={activeCategory}
+        onError={showErrorToast}
       />
-      <div className="p-10 pl-45 hidden lg:block bg-base">
+      <div className="p-10 pl-45 hidden lg:block">
         <div className="flex justify-start items-center gap-4 p-5 pb-10">
-          <h2 className="font-semibold md:text-2xl pl-3">Filter by organizer</h2>
+          <h2 className="font-semibold md:text-2xl pl-3 text-white/80">Filter by organizer</h2>
         </div>
       </div>
       <div className="px-4 lg:px-10 pb-8">
         <div className="flex flex-wrap gap-2 mb-6">
           <button
             onClick={() => setSelectedOrganizer(null)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${!selectedOrganizer ? 'bg-violet-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              !selectedOrganizer
+                ? 'bg-accent text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/15 border border-white/10'
+            }`}
           >
             All Organizers
           </button>
@@ -72,7 +74,11 @@ export default function DiscoverPage() {
             <button
               key={organizer.id}
               onClick={() => setSelectedOrganizer(organizer.id)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${selectedOrganizer === organizer.id ? 'bg-violet-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                selectedOrganizer === organizer.id
+                  ? 'bg-accent text-white'
+                  : 'bg-white/10 text-white/60 hover:bg-white/15 border border-white/10'
+              }`}
             >
               {organizer.title}
             </button>
