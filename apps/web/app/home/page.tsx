@@ -318,7 +318,7 @@ function SectionHeader<T extends string>({
 }) {
   return (
     <div className="flex flex-col  gap-3 sm:gap-8 mb-6 sm:mb-8">
-      <h2 className="text-[24px] sm:text-[28px] lg:text-[3.6rem] leading-16.5 tracking-[0px] font-semibold text-ink-deep italic">
+      <h2 className="text-[24px] sm:text-[28px] lg:text-[3.6rem] leading-16.5 tracking-[0px] font-semibold text-white">
         {title}
       </h2>
       <div className="flex justify-between items-end">
@@ -675,7 +675,7 @@ export default function HomePage() {
   const [forYouTab, setForYouTab] = useState<ForYouTab>("discover");
 
   return (
-    <div className="min-h-screen bg-base-alt">
+    <div className="min-h-screen bg-dark-deep">
       <Navbar />
 
       <main className="w-full max-w-304.5 mx-auto px-3 sm:px-4 lg:px-6 xl:px-0 pt-6 sm:pt-22.5 pb-12 sm:pb-20">
