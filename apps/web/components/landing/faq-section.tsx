@@ -1,66 +1,50 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+
+const faqs = [
+  {
+    q: "How do I create an event?",
+    a: 'Click "Create Event", fill in your details, set ticket prices (or make it free), and publish. Your event page goes live instantly with a shareable link.',
+  },
+  {
+    q: "What are the fees?",
+    a: "Free events are always 100% free. Paid events have a 5% platform fee on the Starter plan, and 0% on the Pro plan ($29/mo). Stellar network fees are less than $0.01.",
+  },
+  {
+    q: "How do payouts work?",
+    a: "Payouts are sent in USDC on the Stellar network directly to your wallet. Starter plan payouts settle in 24-48 hours. Pro plan payouts are instant.",
+  },
+  {
+    q: "What wallets are supported?",
+    a: "We support Freighter, Albedo, and Lobstr — any Stellar-compatible wallet. Buyers can pay with XLM or USDC.",
+  },
+  {
+    q: "What happens if an event is cancelled?",
+    a: "Funds are held in an on-chain escrow smart contract. If an organiser cancels, refunds are processed automatically to all ticket holders.",
+  },
+  {
+    q: "Is there support for organisers?",
+    a: "Yes. All organisers get community support. Pro plan members get priority email support and a dedicated account manager.",
+  },
+];
 
 export function FAQSection() {
   return (
-    <section id="faqs" className="w-full bg-dark-deep border-t border-white/5 pb-24 select-none">
-      <div className="w-full max-w-[1240px] mx-auto px-4 flex flex-col items-center">
-        <div className="bg-accent/10 border border-accent/20 text-accent-light px-6 py-2 rounded-full text-sm mb-16 font-medium">
-          FAQs
+    <section className="w-full bg-dark-deep border-t border-white/5 py-24">
+      <div className="max-w-[800px] mx-auto px-4">
+        <div className="text-center mb-16">
+          <span className="text-accent-light text-sm font-semibold tracking-wider uppercase">FAQs</span>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mt-3">
+            Frequently asked questions
+          </h2>
         </div>
 
-        <div className="w-full flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
-          {/* Left Image */}
-          <div className="w-full lg:w-1/2 flex justify-center lg:justify-start">
-            {/* Desktop Image (Vertical) */}
-            <div className="relative w-full max-w-[334px] hidden lg:block">
-              <Image
-                src="/images/FAQs.png"
-                alt="FAQs"
-                width={334}
-                height={554}
-                className="object-contain w-full h-auto"
-              />
-            </div>
-
-            {/* Mobile Image (Horizontal) */}
-            <div className="relative w-full block lg:hidden justify-center items-center">
-              <Image
-                src="/images/FAQs-horizontal.png"
-                alt="FAQs"
-                width={500} // Assuming roughly this width, layout will constrain it
-                height={300}
-                className="object-contain w-full h-auto max-w-[500px] mx-auto"
-              />
-            </div>
-          </div>
-
-          {/* Right Content - Accordion */}
-          <div className="w-full lg:w-2/2 flex flex-col gap-4">
-            <FAQItem
-              question="How do I create an event on EventHivez?"
-              answer="Simply click the 'Create Event' button, fill in your event details, set your ticket prices (or make it free), and publish. Your event page will be live instantly."
-            />
-            <FAQItem
-              question="What are the fees for paid events?"
-              answer="For free events, EventHivez is completely free. For paid events, we charge a small service fee. If you are on the Pro plan, there is a 0% platform fee."
-            />
-            <FAQItem
-              question="How do I get paid?"
-              answer="Payouts are processed automatically via Stellar USDC. You can connect your wallet and receive funds directly, often within hours of your event's completion."
-            />
-            <FAQItem
-              question="Can I customize my event page?"
-              answer="Yes! You can upload custom banners, add detailed descriptions, and manage your brand settings to make your event page look exactly how you want."
-            />
-            <FAQItem
-              question="Is there support if I have issues?"
-              answer="Absolutely. We offer 24/7 support for all organizers. Pro plan members get priority support and dedicated account assistance."
-            />
-          </div>
+        <div className="flex flex-col gap-3">
+          {faqs.map((faq) => (
+            <FAQItem key={faq.q} question={faq.q} answer={faq.a} />
+          ))}
         </div>
       </div>
     </section>
@@ -68,35 +52,37 @@ export function FAQSection() {
 }
 
 function FAQItem({ question, answer }: { question: string; answer: string }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="w-full bg-white/5 border border-white/10 rounded-2xl overflow-hidden transition-all duration-300 hover:border-accent/20">
+    <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl overflow-hidden hover:border-accent/10 transition-colors">
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-6 text-left"
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between p-5 text-left"
       >
-        <span className="text-white font-semibold text-lg">{question}</span>
-        <Image
-          src={isOpen ? "/icons/remove-circle.svg" : "/icons/add-circle.svg"}
-          alt="toggle"
-          width={24}
-          height={24}
-          className="shrink-0 transition-transform duration-300"
-        />
+        <span className="text-white font-medium text-base pr-4">{question}</span>
+        <svg
+          className={`w-5 h-5 text-white/30 flex-shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+        </svg>
       </button>
 
       <AnimatePresence>
-        {isOpen && (
+        {open && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <div className="p-6 pt-0 text-gray-300 leading-relaxed">
+            <div className="px-5 pb-5 text-white/40 text-sm leading-relaxed">
               {answer}
             </div>
           </motion.div>
