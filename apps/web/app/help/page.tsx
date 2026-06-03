@@ -105,36 +105,36 @@ export default function HelpCenterPage() {
     : categories;
 
   return (
-    <main className="flex flex-col min-h-screen bg-[#FFFBE9]">
+    <main className="flex flex-col min-h-screen bg-dark-deep">
       <Navbar />
 
       {/* ── Hero ─────────────────────────────────────────────────── */}
       <section className="mt-20 px-4 py-16 md:py-24 flex flex-col items-center text-center">
         {/* Badge */}
-        <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border border-black bg-[#FDDA23] text-xs font-semibold tracking-wide mb-6 shadow-[-3px_3px_0px_0px_rgba(0,0,0,1)]">
+        <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border border-black bg-accent text-xs font-semibold tracking-wide mb-6 shadow-[-3px_3px_0px_0px_rgba(0,0,0,1)]">
           <Image src={HelpCircleIcon} alt="" width={14} height={14} />
           Help Center
         </span>
 
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-black leading-tight max-w-2xl">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight max-w-2xl">
           How can we{" "}
           <span className="relative inline-block">
             help you?
             {/* yellow underline accent */}
             <span
               aria-hidden
-              className="absolute left-0 -bottom-1 w-full h-3 bg-[#FDDA23] -z-10 rounded-sm"
+              className="absolute left-0 -bottom-1 w-full h-3 bg-accent -z-10 rounded-sm"
             />
           </span>
         </h1>
 
-        <p className="mt-5 text-base md:text-lg text-gray-600 max-w-md">
+        <p className="mt-5 text-base md:text-lg text-white/60 max-w-md">
           Browse our help topics or search for a specific question below.
         </p>
 
         {/* Search bar */}
         <div className="mt-8 w-full max-w-xl relative">
-          <div className="flex items-center gap-3 bg-white border-2 border-black rounded-full px-5 py-3 shadow-[-5px_5px_0px_0px_rgba(0,0,0,1)] focus-within:shadow-[-3px_3px_0px_0px_rgba(0,0,0,1)] focus-within:-translate-x-[1px] focus-within:translate-y-[1px] transition-all">
+          <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full px-5 py-3 shadow-[-5px_5px_0px_0px_rgba(124,58,237,0.3)] focus-within:shadow-[-3px_3px_0px_0px_rgba(0,0,0,1)] focus-within:-translate-x-[1px] focus-within:translate-y-[1px] transition-all">
             <Image
               src={SearchIcon}
               alt="Search"
@@ -147,13 +147,13 @@ export default function HelpCenterPage() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search for articles, topics…"
-              className="flex-1 bg-transparent text-sm font-medium text-black placeholder:text-gray-400 outline-none"
+              className="flex-1 bg-transparent text-sm font-medium text-white placeholder:text-gray-400 outline-none"
               aria-label="Search help articles"
             />
             {query && (
               <button
                 onClick={() => setQuery("")}
-                className="text-gray-400 hover:text-black text-lg leading-none transition-colors"
+                className="text-gray-400 hover:text-white text-lg leading-none transition-colors"
                 aria-label="Clear search"
               >
                 ×
@@ -168,7 +168,7 @@ export default function HelpCenterPage() {
             <button
               key={label}
               onClick={() => setQuery(label)}
-              className="px-3 py-1 rounded-full border border-black text-xs font-medium bg-white hover:bg-[#FDDA23] transition-colors"
+              className="px-3 py-1 rounded-full border border-black text-xs font-medium bg-white hover:bg-accent transition-colors"
             >
               {label}
             </button>
@@ -180,11 +180,11 @@ export default function HelpCenterPage() {
       <section className="px-4 md:px-8 pb-20 max-w-5xl mx-auto w-full">
         {/* Section heading */}
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-xl font-bold text-black">
+          <h2 className="text-xl font-bold text-white">
             {query ? `Results for "${query}"` : "Browse Topics"}
           </h2>
           {query && (
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-white/50">
               {filtered.length} topic{filtered.length !== 1 ? "s" : ""}
             </span>
           )}
@@ -194,12 +194,12 @@ export default function HelpCenterPage() {
           /* Empty state */
           <div className="flex flex-col items-center py-20 text-center">
             <span className="text-5xl mb-4">🔍</span>
-            <p className="font-semibold text-black">No topics found</p>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="font-semibold text-white">No topics found</p>
+            <p className="text-sm text-white/50 mt-1">
               Try a different search term, or{" "}
               <button
                 onClick={() => setQuery("")}
-                className="underline text-black"
+                className="underline text-white"
               >
                 browse all topics
               </button>
@@ -213,15 +213,15 @@ export default function HelpCenterPage() {
               <li key={category.slug}>
                 <Link
                   href={`/help/${category.slug}`}
-                  className="group flex flex-col h-full bg-white border-2 border-black rounded-2xl p-6
-                             shadow-[-5px_5px_0px_0px_rgba(0,0,0,1)]
+                  className="group flex flex-col h-full bg-white/5 border border-white/10 rounded-2xl p-6
+                             shadow-[-5px_5px_0px_0px_rgba(124,58,237,0.3)]
                              hover:shadow-[-3px_3px_0px_0px_rgba(0,0,0,1)]
                              hover:-translate-x-[1px] hover:translate-y-[1px]
                              active:shadow-none active:-translate-x-[3px] active:translate-y-[3px]
                              transition-all duration-150"
                 >
                   {/* Icon badge */}
-                  <div className="w-12 h-12 rounded-xl border-2 border-black bg-[#FDDA23] flex items-center justify-center mb-4 shadow-[-3px_3px_0px_0px_rgba(0,0,0,1)] group-hover:shadow-[-1px_1px_0px_0px_rgba(0,0,0,1)] group-hover:-translate-x-[1px] group-hover:translate-y-[1px] transition-all">
+                  <div className="w-12 h-12 rounded-xl border-2 border-black bg-accent flex items-center justify-center mb-4 shadow-[-3px_3px_0px_0px_rgba(0,0,0,1)] group-hover:shadow-[-1px_1px_0px_0px_rgba(0,0,0,1)] group-hover:-translate-x-[1px] group-hover:translate-y-[1px] transition-all">
                     <Image
                       src={category.icon}
                       alt={category.title}
@@ -231,22 +231,22 @@ export default function HelpCenterPage() {
                   </div>
 
                   {/* Text */}
-                  <h3 className="font-bold text-base text-black leading-snug mb-1">
+                  <h3 className="font-bold text-base text-white leading-snug mb-1">
                     {category.title}
                   </h3>
-                  <p className="text-sm text-gray-500 flex-1 leading-relaxed">
+                  <p className="text-sm text-white/50 flex-1 leading-relaxed">
                     {category.description}
                   </p>
 
                   {/* Footer row */}
                   <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
-                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-gray-500">
+                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-white/50">
   {category.articleCount} article
   {category.articleCount !== 1 ? "s" : ""}
 </span>
 
                     {/* Arrow */}
-                    <span className="text-black opacity-0 group-hover:opacity-100 transition-opacity text-sm font-bold">
+                    <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity text-sm font-bold">
                       →
                     </span>
                   </div>
@@ -259,12 +259,12 @@ export default function HelpCenterPage() {
 
       {/* ── Contact Banner ───────────────────────────────────────── */}
       <section className="px-4 md:px-8 pb-24 max-w-5xl mx-auto w-full">
-        <div className="border-2 border-black rounded-2xl bg-[#FDDA23] p-8 shadow-[-6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <div className="border-2 border-black rounded-2xl bg-accent p-8 shadow-[-6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
-            <p className="font-black text-lg text-black">
+            <p className="font-black text-lg text-white">
               Still can&apos;t find what you need?
             </p>
-            <p className="text-sm text-black/70 mt-1">
+            <p className="text-sm text-white/70 mt-1">
               Our support team is happy to help you out.
             </p>
           </div>
