@@ -54,7 +54,7 @@ export default function AuthPage() {
   };
 
   return (
-    <main className="min-h-screen bg-sand relative flex items-center justify-center">
+    <main className="min-h-screen bg-dark-deep relative flex items-center justify-center">
       {/* Back Button */}
       <Button
         type="button"
@@ -67,10 +67,10 @@ export default function AuthPage() {
       </Button>
 
       {/* Auth Card */}
-      <div className="w-[360px] bg-[#F3EEDC] rounded-2xl shadow-[0_8px_0_#00000020] p-8 flex flex-col items-center">
+      <div className="w-[360px] bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl shadow-[0_8px_0_rgba(124,58,237,0.2)] p-8 flex flex-col items-center">
         {/* Logo Container */}
         <div className="mb-6">
-          <div className="bg-white border-2 border-black rounded-lg px-4 py-2 shadow-[2px_2px_0_#000]">
+          <div className="bg-accent/10 border border-accent/30 rounded-lg px-4 py-2 shadow-[2px_2px_0_rgba(124,58,237,0.3)]">
             <Image
               src="/logo/eventhivez logo.svg"
               alt="EventHivez"
@@ -80,15 +80,15 @@ export default function AuthPage() {
           </div>
         </div>
 
-        <h1 className="text-xl font-semibold mb-1 text-black">
-          Welcome to eventhivez
+        <h1 className="text-xl font-semibold mb-1 text-white">
+          Welcome to EventHivez
         </h1>
-        <p className="text-xs text-gray-600 mb-6 text-center">
+        <p className="text-xs text-white/50 mb-6 text-center">
           Please sign in or sign up below.
         </p>
 
         <form onSubmit={handleSubmit} className="w-full">
-          <label className="text-sm font-medium block mb-2 text-black">
+          <label className="text-sm font-medium block mb-2 text-white/70">
             Email
           </label>
 
@@ -96,7 +96,7 @@ export default function AuthPage() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-className="w-full bg-white border-2 border-black rounded-full px-4 py-2 mb-4 outline-none"
+className="w-full bg-white/5 border border-white/20 rounded-full px-4 py-2 mb-4 outline-none text-white placeholder:text-white/30 focus:border-accent transition-colors"
           />
 
           {error && <p className="text-xs text-red-500 mb-3 mt-1">{error}</p>}
@@ -115,11 +115,12 @@ className="w-full bg-white border-2 border-black rounded-full px-4 py-2 mb-4 out
               flex items-center justify-center gap-2
               mb-4
               mt-3
-              border-2 border-black
-              shadow-[0_4px_0_#000]
+              border border-accent/50
+              shadow-[0_4px_0_rgba(124,58,237,0.4)]
               active:translate-y-[2px]
-              active:shadow-[0_2px_0_#000]
+              active:shadow-[0_2px_0_rgba(124,58,237,0.4)]
               transition
+              text-white
             "
           >
             Continue with Email
@@ -131,16 +132,18 @@ className="w-full bg-white border-2 border-black rounded-full px-4 py-2 mb-4 out
             onClick={() => router.push("/api/auth/google")}
             className="
               w-full
-              bg-black
+              bg-white/10
               text-white
               rounded-full
               py-2
               flex items-center justify-center gap-2
               mb-3
-              border-2 border-black
-              shadow-[0_4px_0_#000]
+              border border-white/20
+              shadow-[0_4px_0_rgba(255,255,255,0.1)]
               active:translate-y-[2px]
-              active:shadow-[0_2px_0_#000]
+              active:shadow-[0_2px_0_rgba(255,255,255,0.1)]
+              hover:bg-white/15
+              transition
             "
           >
             <Image src="/icons/google.svg" alt="Google" width={16} height={16} />
@@ -152,15 +155,17 @@ className="w-full bg-white border-2 border-black rounded-full px-4 py-2 mb-4 out
             onClick={() => router.push("/api/auth/apple")}
             className="
               w-full
-              bg-black
+              bg-white/10
               text-white
               rounded-full
               py-2
               flex items-center justify-center gap-2
-              border-2 border-black
-              shadow-[0_4px_0_#000]
+              border border-white/20
+              shadow-[0_4px_0_rgba(255,255,255,0.1)]
               active:translate-y-[2px]
-              active:shadow-[0_2px_0_#000]
+              active:shadow-[0_2px_0_rgba(255,255,255,0.1)]
+              hover:bg-white/15
+              transition
             "
           >
             <Image src="/icons/apple.svg" alt="Apple" width={16} height={16} />
