@@ -127,11 +127,11 @@ export default function CreateEventPage() {
   };
 
   return (
-    <main className="flex flex-col min-h-screen bg-base">
+    <main className="flex flex-col min-h-screen bg-dark-deep">
       <Navbar />
 
       <form onSubmit={handleSubmit} className="w-full max-w-[1221px] mx-auto px-4 lg:px-0 py-8 lg:py-12 flex-1 flex flex-col">
-        <h1 className="text-[58px] font-semibold italic text-ink-deep mb-8 lg:mb-10 tracking-tight leading-[66px]">
+        <h1 className="text-[58px] font-semibold text-white mb-8 lg:mb-10 tracking-tight leading-[66px]">
           Create your Event
         </h1>
 
@@ -170,8 +170,8 @@ export default function CreateEventPage() {
           </div>
 
           <div className="flex-1 w-full flex flex-col gap-4">
-            <div className={`bg-white/50 backdrop-blur-sm border-[1.5px] rounded-[16px] p-6 lg:p-7 flex flex-col justify-center relative shadow-sm min-h-[120px] transition-colors ${errors.title ? "border-red-500 bg-red-50/10" : "border-black/3"}`}>
-              <label className="text-[15px] font-semibold text-ink-alt absolute top-4 left-6 leading-[66px]">
+            <div className={`bg-white/5 backdrop-blur-sm border-[1.5px] rounded-[16px] p-6 lg:p-7 flex flex-col justify-center relative shadow-sm min-h-[120px] transition-colors ${errors.title ? "border-red-500 bg-red-50/10" : "border-white/10"}`}>
+              <label className="text-[15px] font-semibold text-white/60 absolute top-4 left-6 leading-[66px]">
                 Event Title
               </label>
               <input
@@ -180,7 +180,7 @@ export default function CreateEventPage() {
                 value={formData.title}
                 onChange={handleChange}
                 placeholder="Event Name"
-                className="text-[38px] font-semibold placeholder:text-muted-text/30 text-muted-text outline-none w-full bg-transparent mt-12 mb-2"
+                className="text-[38px] font-semibold placeholder:text-white/20 text-white outline-none w-full bg-transparent mt-12 mb-2"
               />
               {errors.title && <span className="text-red-500 text-sm font-bold absolute bottom-2 right-6">{errors.title}</span>}
             </div>
@@ -244,7 +244,7 @@ export default function CreateEventPage() {
                 </div>
               </div>
 
-              <div className="flex-1 bg-white/50 backdrop-blur-sm border-[1.5px] border-black/3 rounded-[16px] p-4 px-5 flex items-center justify-between shadow-sm min-w-[200px]">
+              <div className="flex-1 bg-white/5 backdrop-blur-sm border-[1.5px] border-white/10 rounded-[16px] p-4 px-5 flex items-center justify-between shadow-sm min-w-[200px]">
                 <div className="flex flex-col gap-0 justify-center h-full">
                   {isMounted ? (
                     <>
@@ -285,7 +285,7 @@ export default function CreateEventPage() {
             </div>
 
             <div className={`bg-white/50 backdrop-blur-sm border-[1.5px] rounded-[16px] p-6 flex flex-col justify-center relative shadow-sm min-h-[120px] mt-2 transition-colors ${errors.location ? "border-red-500 bg-red-50/10" : "border-black/3"}`}>
-              <label className="text-[15px] font-semibold text-ink-alt absolute top-3 left-6 leading-[66px]">
+              <label className="text-[15px] font-semibold text-white/60 absolute top-3 left-6 leading-[66px]">
                 Add Event Location
               </label>
               <div className="flex items-center justify-between w-full mt-[50px]">
@@ -295,7 +295,7 @@ export default function CreateEventPage() {
                   value={formData.location}
                   onChange={handleChange}
                   placeholder="Offline location or virtual link"
-                  className="text-[19px] font-semibold placeholder:text-muted-text/30 text-muted-text outline-none bg-transparent flex-1"
+                  className="text-[19px] font-semibold placeholder:text-white/20 text-white outline-none bg-transparent flex-1"
                 />
                 <div className="flex gap-[10px] shrink-0">
                   <button type="button" className="w-[49px] h-[49px] rounded-[120px] bg-subtle/50 flex items-center justify-center hover:bg-subtle/70 transition-colors">
@@ -319,8 +319,8 @@ export default function CreateEventPage() {
               {errors.location && <span className="text-red-500 text-sm font-bold absolute bottom-2 left-6">{errors.location}</span>}
             </div>
 
-            <div className="bg-white/50 backdrop-blur-sm border-[1.5px] border-black/3 rounded-[16px] p-6 flex flex-col justify-center relative shadow-sm min-h-[120px] mt-2">
-              <label className="text-[15px] font-semibold text-ink-alt absolute top-3 left-6 leading-[66px]">
+            <div className="bg-white/5 backdrop-blur-sm border-[1.5px] border-white/10 rounded-[16px] p-6 flex flex-col justify-center relative shadow-sm min-h-[120px] mt-2">
+              <label className="text-[15px] font-semibold text-white/60 absolute top-3 left-6 leading-[66px]">
                 Add Description
               </label>
               <div className="flex items-end justify-between w-full mt-[50px] gap-4">
@@ -343,13 +343,13 @@ export default function CreateEventPage() {
               </div>
             </div>
 
-            <h2 className="text-[19px] font-bold mt-4 text-ink-alt leading-[66px] h-[30px] flex items-center">
+            <h2 className="text-[19px] font-bold mt-4 text-white leading-[66px] h-[30px] flex items-center">
               Event Options
             </h2>
 
             <div className="flex flex-col lg:flex-row gap-4 mt-2">
               <div className="flex-3 bg-subtle/50 border-[1.5px] border-black/3 backdrop-blur-sm rounded-[16px] p-4 flex gap-[10px] shadow-sm relative pt-[50px]">
-                <label className="text-[15px] font-semibold text-ink-alt absolute top-2 left-4 leading-[66px]">
+                <label className="text-[15px] font-semibold text-white/60 absolute top-2 left-4 leading-[66px]">
                   Event Visibility
                 </label>
 
@@ -390,8 +390,8 @@ export default function CreateEventPage() {
                 </button>
               </div>
 
-              <div className="flex-2 bg-white/50 backdrop-blur-sm border-[1.5px] border-black/3 rounded-[16px] p-6 flex flex-col justify-center relative shadow-sm min-h-[150px]">
-                <label className="text-[15px] font-semibold text-ink-alt absolute top-3 left-4 leading-[66px]">
+              <div className="flex-2 bg-white/5 backdrop-blur-sm border-[1.5px] border-white/10 rounded-[16px] p-6 flex flex-col justify-center relative shadow-sm min-h-[150px]">
+                <label className="text-[15px] font-semibold text-white/60 absolute top-3 left-4 leading-[66px]">
                   Set Capacity
                 </label>
                 <div className="flex items-center justify-between w-full mt-[50px] gap-4">
@@ -416,7 +416,7 @@ export default function CreateEventPage() {
             </div>
 
             <div className={`bg-white/50 backdrop-blur-sm border-[1.5px] rounded-[16px] p-6 flex flex-col justify-center relative shadow-sm min-h-[120px] mt-2 transition-colors ${errors.price ? "border-red-500 bg-red-50/10" : "border-black/3"}`}>
-              <label className="text-[15px] font-semibold text-ink-alt absolute top-3 left-6 leading-[66px]">
+              <label className="text-[15px] font-semibold text-white/60 absolute top-3 left-6 leading-[66px]">
                 Ticket Price
               </label>
               <div className="flex items-center justify-between w-full mt-[50px] gap-4">
