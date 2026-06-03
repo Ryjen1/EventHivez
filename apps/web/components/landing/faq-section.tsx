@@ -6,9 +6,9 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export function FAQSection() {
   return (
-    <section id="faqs" className="w-full bg-base pb-24 select-none">
+    <section id="faqs" className="w-full bg-dark-deep border-t border-white/5 pb-24 select-none">
       <div className="w-full max-w-[1240px] mx-auto px-4 flex flex-col items-center">
-        <div className="bg-accent text-black px-6 py-2 rounded-full font-medium text-sm mb-16">
+        <div className="bg-accent/10 border border-accent/20 text-accent-light px-6 py-2 rounded-full text-sm mb-16 font-medium">
           FAQs
         </div>
 
@@ -71,7 +71,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="w-full bg-ink rounded-2xl overflow-hidden transition-all duration-300">
+    <div className="w-full bg-white/5 border border-white/10 rounded-2xl overflow-hidden transition-all duration-300 hover:border-accent/20">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
