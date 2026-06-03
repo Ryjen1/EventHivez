@@ -101,7 +101,7 @@ export function PricingSection() {
                 href="/auth"
                 className={`mt-8 block text-center py-3 rounded-xl font-semibold text-sm transition-all ${
                   plan.highlighted
-                    ? "bg-accent hover:bg-accent-hover text-white hover:shadow-[0_0_30px_rgba(124,58,237,0.3)]"
+                    ? "bg-accent hover:bg-accent-hover text-white hover:shadow-[0_0_30px_rgba(245,158,11,0.3)]"
                     : "bg-white/5 border border-white/10 hover:bg-white/10 text-white"
                 }`}
               >

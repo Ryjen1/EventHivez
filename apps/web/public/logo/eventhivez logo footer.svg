@@ -1,11 +1,9 @@
 <svg width="160" height="36" viewBox="0 0 160 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Hexagon icon -->
-  <path d="M18 2L32.4 10V26L18 34L3.6 26V10L18 2Z" stroke="#A78BFA" stroke-width="2" fill="none"/>
-  <path d="M18 7L27.2 12.5V23.5L18 29L8.8 23.5V12.5L18 7Z" fill="#7C3AED" opacity="0.2"/>
-  <circle cx="18" cy="18" r="3.5" fill="#7C3AED"/>
+  <path d="M18 2L32.4 10V26L18 34L3.6 26V10L18 2Z" stroke="#FCD34D" stroke-width="2" fill="none"/>
+  <path d="M18 7L27.2 12.5V23.5L18 29L8.8 23.5V12.5L18 7Z" fill="#F59E0B" opacity="0.15"/>
+  <circle cx="18" cy="18" r="3.5" fill="#F59E0B"/>
   <path d="M18 14.5V21.5M14.5 18H21.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
-  <!-- Text -->
   <text x="42" y="24" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="700" fill="white">
-    Event<tspan fill="#A78BFA">Hivez</tspan>
+    Event<tspan fill="#FCD34D">Hivez</tspan>
   </text>
 </svg>

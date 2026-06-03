@@ -70,7 +70,7 @@ export function HeroSection() {
           >
             <Link
               href="/create-event"
-              className="w-full sm:w-auto px-8 py-4 bg-accent hover:bg-accent-hover text-white font-semibold rounded-2xl text-center transition-all hover:shadow-[0_0_30px_rgba(124,58,237,0.3)]"
+              className="w-full sm:w-auto px-8 py-4 bg-accent hover:bg-accent-hover text-white font-semibold rounded-2xl text-center transition-all hover:shadow-[0_0_30px_rgba(245,158,11,0.3)]"
             >
               Create Your Event — Free
             </Link>

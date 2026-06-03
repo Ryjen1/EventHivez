@@ -134,7 +134,7 @@ export default function HelpCenterPage() {
 
         {/* Search bar */}
         <div className="mt-8 w-full max-w-xl relative">
-          <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full px-5 py-3 shadow-[-5px_5px_0px_0px_rgba(124,58,237,0.3)] focus-within:shadow-[-3px_3px_0px_0px_rgba(0,0,0,1)] focus-within:-translate-x-[1px] focus-within:translate-y-[1px] transition-all">
+          <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full px-5 py-3 shadow-[-5px_5px_0px_0px_rgba(245,158,11,0.3)] focus-within:shadow-[-3px_3px_0px_0px_rgba(0,0,0,1)] focus-within:-translate-x-[1px] focus-within:translate-y-[1px] transition-all">
             <Image
               src={SearchIcon}
               alt="Search"
@@ -214,7 +214,7 @@ export default function HelpCenterPage() {
                 <Link
                   href={`/help/${category.slug}`}
                   className="group flex flex-col h-full bg-white/5 border border-white/10 rounded-2xl p-6
-                             shadow-[-5px_5px_0px_0px_rgba(124,58,237,0.3)]
+                             shadow-[-5px_5px_0px_0px_rgba(245,158,11,0.3)]
                              hover:shadow-[-3px_3px_0px_0px_rgba(0,0,0,1)]
                              hover:-translate-x-[1px] hover:translate-y-[1px]
                              active:shadow-none active:-translate-x-[3px] active:translate-y-[3px]

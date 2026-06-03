@@ -4,18 +4,18 @@
 @theme inline {
   --font-sans: var(--font-inter);
 
-  /* ── EventHivez colour palette — Purple/Violet ── */
-  --color-accent:        #7C3AED;
-  --color-accent-hover:  #6D28D9;
-  --color-accent-dark:   #5B21B6;
-  --color-accent-muted:  #EDE9FE;
-  --color-accent-light:  #A78BFA;
+  /* ── EventHivez — Orange/Amber palette ── */
+  --color-accent:        #F59E0B;
+  --color-accent-hover:  #D97706;
+  --color-accent-dark:   #B45309;
+  --color-accent-muted:  #FEF3C7;
+  --color-accent-light:  #FCD34D;
 
   --color-base:          #FAFAF9;
-  --color-base-alt:      #F5F3FF;
+  --color-base-alt:      #FFFBEB;
   --color-surface:       #FFFFFF;
-  --color-surface-alt:   #F8F7FF;
-  --color-cream:         #F3EEDC;
+  --color-surface-alt:   #FFFEF7;
+  --color-cream:         #FEF3C7;
   --color-muted:         #F5F5F4;
   --color-subtle:        #D5D5D6;
   --color-border-warm:   #E7E5E4;
@@ -25,16 +25,15 @@
   --color-ink-soft:      #1A1A1A;
   --color-ink-alt:       #1C1C1C;
   --color-ink-deep:      #131517;
-  --color-dark:          #0B0B1F;
-  --color-dark-alt:      #1E1B4B;
-  --color-dark-deep:     #0C0A2A;
+  --color-dark:          #0C0A07;
+  --color-dark-alt:      #1C1510;
+  --color-dark-deep:     #0A0806;
 
   --color-muted-text:    #747475;
   --color-error:         #EF4444;
   --color-success-light: #DAFFB5;
 }
 
-/* ── Focus-visible styles (WCAG AA) ── */
 *:focus {
   outline: none;
 }
@@ -49,12 +48,12 @@ select:focus-visible,
   outline-offset: 2px;
 }
 
-/* NProgress Custom Styles */
+/* NProgress */
 #nprogress .bar {
-  background: #7C3AED !important;
+  background: #F59E0B !important;
   height: 3px !important;
 }
 
 #nprogress .peg {
-  box-shadow: 0 0 10px #7C3AED, 0 0 5px #7C3AED !important;
+  box-shadow: 0 0 10px #F59E0B, 0 0 5px #F59E0B !important;
 }

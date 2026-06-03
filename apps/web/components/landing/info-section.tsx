@@ -142,7 +142,7 @@ export function InfoSection() {
         >
           <Link
             href="/create-event"
-            className="inline-flex px-8 py-4 bg-accent hover:bg-accent-hover text-white font-semibold rounded-2xl transition-all hover:shadow-[0_0_30px_rgba(124,58,237,0.3)]"
+            className="inline-flex px-8 py-4 bg-accent hover:bg-accent-hover text-white font-semibold rounded-2xl transition-all hover:shadow-[0_0_30px_rgba(245,158,11,0.3)]"
           >
             Start Hosting Today
           </Link>

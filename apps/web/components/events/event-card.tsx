@@ -35,7 +35,7 @@ export function EventCard({
 
   return (
     <Link href={`/events/${id}`} className="block w-full">
-      <div className="w-full sm:max-w-147.5 shadow-[-4px_4px_0_rgba(124,58,237,0.3)] sm:shadow-[-6px_6px_0_rgba(124,58,237,0.3)] flex flex-col bg-white/5 backdrop-blur-sm border border-white/10 pb-4.75 sm:pl-12.5 pl-4 pt-5 sm:pt-9.75 rounded-xl sm:pr-5 pr-3.75 transition-all hover:scale-[1.02] hover:border-accent/30 overflow-hidden">
+      <div className="w-full sm:max-w-147.5 shadow-[-4px_4px_0_rgba(245,158,11,0.3)] sm:shadow-[-6px_6px_0_rgba(245,158,11,0.3)] flex flex-col bg-white/5 backdrop-blur-sm border border-white/10 pb-4.75 sm:pl-12.5 pl-4 pt-5 sm:pt-9.75 rounded-xl sm:pr-5 pr-3.75 transition-all hover:scale-[1.02] hover:border-accent/30 overflow-hidden">
         <div className="flex gap-4.75">
           {/* Left Side: Image & Mobile Actions */}
           <div className="flex-shrink-0 w-[40%] sm:w-auto">
