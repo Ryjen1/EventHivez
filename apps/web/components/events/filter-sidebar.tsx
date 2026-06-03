@@ -203,7 +203,7 @@ export function FilterSidebar({
             className="
               fixed top-0 right-0 z-50 h-full
               w-full max-w-[360px] sm:max-w-[420px]
-              bg-base shadow-[-8px_0_32px_rgba(0,0,0,0.12)]
+              bg-dark-deep shadow-[-8px_0_32px_rgba(0,0,0,0.4)]
               flex flex-col overflow-y-auto
             "
             variants={sidebarVariants}
@@ -212,7 +212,7 @@ export function FilterSidebar({
             exit="exit"
           >
             {/* ── Header ── */}
-            <div className="flex items-center justify-between px-6 pt-7 pb-5 border-b border-black/10 shrink-0">
+            <div className="flex items-center justify-between px-6 pt-7 pb-5 border-b border-white/10 shrink-0">
               <div className="flex items-center gap-2.5">
                 <Image
                   src="/icons/filter.svg"
@@ -220,14 +220,15 @@ export function FilterSidebar({
                   height={20}
                   alt=""
                   aria-hidden="true"
+                  className="invert"
                 />
-                <h2 className="font-bold text-[20px]/6 text-black">Filters</h2>
+                <h2 className="font-bold text-[20px]/6 text-white">Filters</h2>
               </div>
               <div className="flex items-center gap-3">
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="text-[13px] font-medium text-black/50 hover:text-black transition-colors underline underline-offset-2"
+                  className="text-[13px] font-medium text-white/50 hover:text-white transition-colors underline underline-offset-2"
                 >
                   Clear Filter
                 </button>
@@ -250,7 +251,7 @@ export function FilterSidebar({
             <div className="flex flex-col gap-7 px-6 py-6 flex-1">
               {/* ─ Date section ─ */}
               <section>
-                <h3 className="font-semibold text-[15px] text-black mb-3">
+                <h3 className="font-semibold text-[15px] text-white mb-3">
                   Date
                 </h3>
                 <div className="flex flex-wrap gap-2">
@@ -269,7 +270,7 @@ export function FilterSidebar({
 
               {/* ─ Category section ─ */}
               <section>
-                <h3 className="font-semibold text-[15px] text-black mb-3">
+                <h3 className="font-semibold text-[15px] text-white mb-3">
                   Category
                 </h3>
                 <div className="flex flex-wrap gap-2">
@@ -289,7 +290,7 @@ export function FilterSidebar({
 
               {/* ─ Location section ─ */}
               <section>
-                <h3 className="font-semibold text-[15px] text-black mb-3">
+                <h3 className="font-semibold text-[15px] text-white mb-3">
                   Location
                 </h3>
                 <div className="flex flex-wrap gap-2">
@@ -309,7 +310,7 @@ export function FilterSidebar({
 
               {/* ─ Price section ─ */}
               <section>
-                <h3 className="font-semibold text-[15px] text-black mb-3">
+                <h3 className="font-semibold text-[15px] text-white mb-3">
                   Price Range
                 </h3>
                 <div className="flex items-center gap-3">
