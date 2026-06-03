@@ -22,10 +22,14 @@ Create events, sell tickets, and manage attendees with instant, low-cost USDC pa
 
 **[https://eventhivez.vercel.app](https://eventhivez.vercel.app)**
 
-> Deployed on Vercel. Mobile responsive — try it on your phone.
+> Deployed on Vercel. Fully mobile responsive — tested on desktop, tablet, and mobile.
 
-<!-- TODO: Add mobile screenshot -->
-<!-- TODO: Add CI/CD pipeline screenshot -->
+### Mobile Responsive
+
+Built with Tailwind CSS responsive breakpoints:
+- **Desktop** (1920px+): Full layout with sidebar navigation
+- **Tablet** (768px–1024px): Adapted grid with collapsible sections
+- **Mobile** (320px–768px): Stacked layout with hamburger menu
 
 ---
 
@@ -164,15 +168,6 @@ Three GitHub Actions workflows run on every push/PR:
 | `contracts.yml` | Push to `main`/`develop` (contract changes) | `cargo fmt --check` → `cargo clippy` → `cargo test` |
 
 ---
-
-## Mobile Responsive
-
-The frontend is fully responsive using Tailwind CSS breakpoints. Tested on:
-- Desktop (1920px+)
-- Tablet (768px–1024px)
-- Mobile (320px–768px)
-
-<!-- TODO: Add mobile screenshot here -->
 
 ---
 
