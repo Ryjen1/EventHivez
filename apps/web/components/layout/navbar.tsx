@@ -4,10 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useWallet } from "@/lib/wallet-context";
 
 export function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { publicKey, isFreighterAvailable, connect, disconnect, isConnecting } = useWallet();
 
   const links = [
     { href: "/discover", label: "Explore" },
@@ -15,6 +17,8 @@ export function Navbar() {
     { href: "/pricing", label: "Pricing" },
     { href: "/help", label: "Help" },
   ];
+
+  const truncateAddress = (addr: string) => `${addr.slice(0, 4)}...${addr.slice(-4)}`;
 
   return (
     <nav className="w-full border-b border-white/5 bg-dark-deep/80 backdrop-blur-xl sticky top-0 z-50">
@@ -47,20 +51,32 @@ export function Navbar() {
           ))}
         </div>
 
-        {/* Desktop CTA */}
+        {/* Desktop wallet */}
         <div className="hidden md:flex items-center gap-3">
-          <Link
-            href="/auth"
-            className="px-4 py-2 text-sm font-medium text-white/60 hover:text-white transition-colors"
-          >
-            Sign In
-          </Link>
-          <Link
-            href="/auth"
-            className="px-5 py-2.5 bg-accent hover:bg-accent-hover text-white text-sm font-semibold rounded-xl transition-colors"
-          >
-            Get Started
-          </Link>
+          {publicKey ? (
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 px-3 py-2 bg-accent/10 border border-accent/20 rounded-xl">
+                <span className="w-2 h-2 bg-green-400 rounded-full" />
+                <span className="text-sm font-mono text-white/80">{truncateAddress(publicKey)}</span>
+              </div>
+              <button
+                type="button"
+                onClick={disconnect}
+                className="text-xs text-white/30 hover:text-white/60 transition-colors"
+              >
+                Disconnect
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={connect}
+              disabled={isConnecting}
+              className="px-5 py-2.5 bg-accent hover:bg-accent-hover text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
+            >
+              {isConnecting ? "Connecting..." : "Connect Wallet"}
+            </button>
+          )}
         </div>
 
         {/* Mobile hamburger */}
@@ -95,20 +111,30 @@ export function Navbar() {
               </Link>
             ))}
             <div className="border-t border-white/10 my-4" />
-            <Link
-              href="/auth"
-              onClick={() => setMobileOpen(false)}
-              className="px-4 py-3 text-center text-white/60 hover:text-white text-base font-medium transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/auth"
-              onClick={() => setMobileOpen(false)}
-              className="px-4 py-3 text-center bg-accent hover:bg-accent-hover text-white text-base font-semibold rounded-xl transition-colors"
-            >
-              Get Started
-            </Link>
+            {publicKey ? (
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-2 px-4 py-3 bg-accent/10 border border-accent/20 rounded-xl">
+                  <span className="w-2 h-2 bg-green-400 rounded-full" />
+                  <span className="text-sm font-mono text-white/80">{truncateAddress(publicKey)}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { disconnect(); setMobileOpen(false); }}
+                  className="px-4 py-3 text-center text-white/40 text-base font-medium"
+                >
+                  Disconnect
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => { connect(); setMobileOpen(false); }}
+                disabled={isConnecting}
+                className="px-4 py-3 text-center bg-accent hover:bg-accent-hover text-white text-base font-semibold rounded-xl transition-colors disabled:opacity-50"
+              >
+                {isConnecting ? "Connecting..." : "Connect Wallet"}
+              </button>
+            )}
           </div>
         </div>
       )}

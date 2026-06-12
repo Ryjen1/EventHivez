@@ -42,6 +42,7 @@ export const metadata: Metadata = {
 
 import { Suspense } from "react";
 import LoadingBar from "@/components/ui/loading-bar";
+import { Providers } from "./providers";
 
 export default function RootLayout({
   children,
@@ -51,12 +52,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${inter.variable} antialiased bg-dark-deep text-white`}>
-        <Suspense fallback={null}>
-          <LoadingBar />
-        </Suspense>
-        <Toaster position="top-right" richColors theme="dark" />
-        {children}
-        <CookieBanner />
+        <Providers>
+          <Suspense fallback={null}>
+            <LoadingBar />
+          </Suspense>
+          <Toaster position="top-right" richColors theme="dark" />
+          {children}
+          <CookieBanner />
+        </Providers>
       </body>
     </html>
   );
