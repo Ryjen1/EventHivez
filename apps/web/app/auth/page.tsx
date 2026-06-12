@@ -1,177 +1,160 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { authSchema } from "@/lib/validation";
+import { useFreighterWallet } from "@/hooks/useFreighterWallet";
+
 export default function AuthPage() {
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { isConnected, publicKey, isLoading, error, connect } = useFreighterWallet();
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const handleConnect = async () => {
+    await connect();
+  };
 
-    const result = authSchema.safeParse({ email });
-    if (!result.success) {
-      setError(result.error.issues[0].message);
-      return;
-    }
-
-    setError("");
-    setIsLoading(true);
-
-    try {
-      const res = await fetch('/api/auth/email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Authentication failed');
-      }
-
-      router.push('/home');
-    } catch (err: unknown) {
-      const message =
-        err instanceof Error ? err.message : "Something went wrong";
-      setError(message);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleContinue = () => {
+    setIsRedirecting(true);
+    router.push("/home");
   };
 
   const handleGoBack = () => {
-    if (typeof window !== 'undefined' && window.history.length > 1) {
+    if (typeof window !== "undefined" && window.history.length > 1) {
       router.back();
     } else {
-      router.push('/');
+      router.push("/");
     }
   };
 
+  const truncateAddress = (addr: string) =>
+    `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+
   return (
-    <main className="min-h-screen bg-dark-deep relative flex items-center justify-center">
+    <main className="min-h-screen bg-dark-deep relative flex items-center justify-center px-4">
       {/* Back Button */}
-      <Button
+      <button
         type="button"
-        variant="secondary"
         onClick={handleGoBack}
-        className="absolute top-10 left-16 text-sm py-2"
+        className="absolute top-10 left-6 md:left-16 flex items-center gap-2 text-sm text-white/50 hover:text-white transition-colors"
       >
-        <Image src="/icons/arrow-left.svg" alt="Back" width={16} height={16} />
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
         Back
-      </Button>
+      </button>
 
       {/* Auth Card */}
-      <div className="w-[360px] bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl shadow-[0_8px_0_rgba(245,158,11,0.2)] p-8 flex flex-col items-center">
-        {/* Logo Container */}
-        <div className="mb-6">
-          <div className="bg-accent/10 border border-accent/30 rounded-lg px-4 py-2 shadow-[2px_2px_0_rgba(245,158,11,0.3)]">
-            <Image
-              src="/logo/eventhivez logo.svg"
-              alt="EventHivez"
-              width={70}
-              height={24}
-            />
-          </div>
+      <div className="w-full max-w-[400px] bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-3xl p-8 md:p-10 flex flex-col items-center">
+        {/* Logo */}
+        <div className="mb-8">
+          <Image
+            src="/logo/eventhivez logo.svg"
+            alt="EventHivez"
+            width={160}
+            height={36}
+            className="h-10 w-auto"
+          />
         </div>
 
-        <h1 className="text-xl font-semibold mb-1 text-white">
-          Welcome to EventHivez
+        <h1 className="text-2xl font-bold mb-2 text-white text-center">
+          Connect Your Wallet
         </h1>
-        <p className="text-xs text-white/50 mb-6 text-center">
-          Please sign in or sign up below.
+        <p className="text-sm text-white/40 mb-8 text-center max-w-[280px]">
+          Sign in with your Stellar wallet to create events, buy tickets, and manage your profile.
         </p>
 
-        <form onSubmit={handleSubmit} className="w-full">
-          <label className="text-sm font-medium block mb-2 text-white/70">
-            Email
-          </label>
+        {/* Wallet Status */}
+        {isConnected && publicKey ? (
+          /* Connected state */
+          <div className="w-full space-y-4">
+            <div className="w-full bg-accent/10 border border-accent/20 rounded-2xl p-4 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0">
+                <svg className="w-5 h-5 text-accent-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-white font-medium text-sm">Connected</p>
+                <p className="text-white/40 text-xs font-mono truncate">{truncateAddress(publicKey)}</p>
+              </div>
+            </div>
 
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-className="w-full bg-white/5 border border-white/20 rounded-full px-4 py-2 mb-4 outline-none text-white placeholder:text-white/30 focus:border-accent transition-colors"
-          />
+            <button
+              type="button"
+              onClick={handleContinue}
+              disabled={isRedirecting}
+              className="w-full py-3.5 bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl transition-all hover:shadow-[0_0_30px_rgba(245,158,11,0.3)] disabled:opacity-50"
+            >
+              {isRedirecting ? "Redirecting..." : "Continue to EventHivez"}
+            </button>
+          </div>
+        ) : (
+          /* Not connected state */
+          <div className="w-full space-y-3">
+            {/* Freighter */}
+            <button
+              type="button"
+              onClick={handleConnect}
+              disabled={isLoading}
+              className="w-full py-3.5 bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl flex items-center justify-center gap-3 transition-all hover:shadow-[0_0_30px_rgba(245,158,11,0.3)] disabled:opacity-50 border border-accent/50"
+            >
+              {isLoading ? (
+                <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3" />
+                </svg>
+              )}
+              {isLoading ? "Connecting..." : "Connect Freighter Wallet"}
+            </button>
 
-          {error && <p className="text-xs text-red-500 mb-3 mt-1">{error}</p>}
+            {/* Albedo */}
+            <button
+              type="button"
+              onClick={handleConnect}
+              disabled={isLoading}
+              className="w-full py-3.5 bg-white/5 hover:bg-white/10 text-white font-medium rounded-xl flex items-center justify-center gap-3 border border-white/10 transition-colors disabled:opacity-50"
+            >
+              <svg className="w-5 h-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+              </svg>
+              Connect Albedo Wallet
+            </button>
+          </div>
+        )}
 
-          <Button
-            type="submit"
-            variant="primary"
-            disabled={isLoading}
-            className="
-              w-full
-              bg-accent
-              hover:bg-accent-hover
-              rounded-full
-              py-2
-              font-medium
-              flex items-center justify-center gap-2
-              mb-4
-              mt-3
-              border border-accent/50
-              shadow-[0_4px_0_rgba(245,158,11,0.4)]
-              active:translate-y-[2px]
-              active:shadow-[0_2px_0_rgba(245,158,11,0.4)]
-              transition
-              text-white
-            "
-          >
-            Continue with Email
-            <Image src="/icons/arrow-right.svg" alt="Arrow" width={16} height={16} />
-          </Button>
+        {/* Error */}
+        {error && (
+          <div className="w-full mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl">
+            <p className="text-red-400 text-xs text-center">{error}</p>
+          </div>
+        )}
 
-          <Button
-            type="button"
-            onClick={() => router.push("/api/auth/google")}
-            className="
-              w-full
-              bg-white/10
-              text-white
-              rounded-full
-              py-2
-              flex items-center justify-center gap-2
-              mb-3
-              border border-white/20
-              shadow-[0_4px_0_rgba(255,255,255,0.1)]
-              active:translate-y-[2px]
-              active:shadow-[0_2px_0_rgba(255,255,255,0.1)]
-              hover:bg-white/15
-              transition
-            "
-          >
-            <Image src="/icons/google.svg" alt="Google" width={16} height={16} />
-            Sign in with Google
-          </Button>
+        {/* Install hint */}
+        {!isConnected && (
+          <p className="text-white/20 text-xs text-center mt-6">
+            Don&apos;t have a wallet?{" "}
+            <a
+              href="https://freighter.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent-light hover:underline"
+            >
+              Install Freighter
+            </a>{" "}
+            — it takes 30 seconds.
+          </p>
+        )}
 
-          <Button
-            type="button"
-            onClick={() => router.push("/api/auth/apple")}
-            className="
-              w-full
-              bg-white/10
-              text-white
-              rounded-full
-              py-2
-              flex items-center justify-center gap-2
-              border border-white/20
-              shadow-[0_4px_0_rgba(255,255,255,0.1)]
-              active:translate-y-[2px]
-              active:shadow-[0_2px_0_rgba(255,255,255,0.1)]
-              hover:bg-white/15
-              transition
-            "
-          >
-            <Image src="/icons/apple.svg" alt="Apple" width={16} height={16} />
-            Sign in with Apple
-          </Button>
-        </form>
+        {/* Stellar badge */}
+        <div className="flex items-center gap-2 mt-6 text-white/20 text-xs">
+          <Image src="/icons/stellar-logo.svg" alt="Stellar" width={14} height={14} className="opacity-40" />
+          <span>Powered by Stellar Network</span>
+        </div>
       </div>
     </main>
   );
